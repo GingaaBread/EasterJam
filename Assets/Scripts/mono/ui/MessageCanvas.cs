@@ -67,7 +67,7 @@ namespace mono.ui
                 _fontIconPrefix = PLAY_STATION_SPRITE_PREFIX;
         }
 
-        public void ShowMessage(LocalizedString message, InputActionReference reference)
+        private IEnumerator ShowMessageAsync(LocalizedString message, InputActionReference reference)
         {
             var messageBuilder = new StringBuilder();
             if (reference != null)
@@ -88,9 +88,18 @@ namespace mono.ui
                 messageBuilder.Append(spriteTag);
             }
 
-            messageBuilder.Append(message.GetLocalizedString());
+            var asyncText = message.GetLocalizedStringAsync();
+
+            while (!asyncText.IsDone) yield return null;
+
+            messageBuilder.Append(asyncText.Result);
             _messageText.text = messageBuilder.ToString();
             ShowMessage();
+        }
+
+        public void ShowMessage(LocalizedString message, InputActionReference reference)
+        {
+            StartCoroutine(ShowMessageAsync(message, reference));
         }
 
         public void ShowMessage(string content, bool isKey = false)

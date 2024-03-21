@@ -633,10 +633,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5597399146068902881, guid: 0ab7ec6c4b6c63745ba7e4cb2575b66a, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6971152182890559946, guid: 0ab7ec6c4b6c63745ba7e4cb2575b66a, type: 3}
       propertyPath: m_Name
       value: Main Camera
@@ -656,6 +652,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1139330529}
   - component: {fileID: 1139330530}
+  - component: {fileID: 1139330532}
+  - component: {fileID: 1139330531}
   m_Layer: 0
   m_Name: Game Loader
   m_TagString: Untagged
@@ -690,11 +688,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47e8ae090087b32489ce23a45978245c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _banks:
-  - Master
+  _banks: []
   _studioIconImage: {fileID: 349031323}
   _studioIconText: {fileID: 622033241}
   _sceneToLoadOnFinish: Main
+--- !u!114 &1139330531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139330528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9468c5f457ace64f8d4df6d642b107f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LoadEvent: 1
+  UnloadEvent: 0
+  Banks:
+  - Master
+  CollisionTag: 
+  PreloadSamples: 1
+--- !u!114 &1139330532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139330528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9468c5f457ace64f8d4df6d642b107f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LoadEvent: 1
+  UnloadEvent: 0
+  Banks:
+  - Music
+  CollisionTag: 
+  PreloadSamples: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

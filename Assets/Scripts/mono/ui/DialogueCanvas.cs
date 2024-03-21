@@ -13,6 +13,7 @@ namespace mono.ui
 {
     public class DialogueCanvas : MonoBehaviour
     {
+        private static readonly int TOGGLE = Animator.StringToHash("Toggle");
         [SerializeField] private GameObject _container;
         [SerializeField] private TMP_Text _dialogueText;
         [SerializeField] private GameObject _skipButtonViewContainer;
@@ -77,7 +78,7 @@ namespace mono.ui
         {
             if (!_waitingForProceed) return;
             _waitingForProceed = false;
-            ShowNextLine();
+            StartCoroutine(ShowNextLine());
         }
 
         public void StartDialogue(LocalizedString[] dialogueLines, bool informCutscenePlayer = false)
@@ -88,15 +89,19 @@ namespace mono.ui
             _waitingForProceed = false;
             _informCutscenePlayerOnFinish = informCutscenePlayer;
 
-            ShowNextLine();
+            StartCoroutine(ShowNextLine());
         }
 
-        private void ShowNextLine()
+        private IEnumerator ShowNextLine()
         {
             if (HasNextLine())
             {
                 _currentLineIndex++;
-                var text = _currentLines[_currentLineIndex].GetLocalizedString();
+                var asyncText = _currentLines[_currentLineIndex].GetLocalizedStringAsync();
+
+                while (!asyncText.IsDone) yield return null;
+
+                var text = asyncText.Result;
                 var amountOfHighlightedPassages = 0;
 
                 const string highlightedPassagePattern = @"\[(.*?)\]";
@@ -108,7 +113,7 @@ namespace mono.ui
                     return $"<color=#{ColorUtility.ToHtmlStringRGB(_highlightedPassageColour)}>{matchValue}</color>";
                 });
 
-                _waitForInputIndicatorAnimator.SetTrigger("Toggle");
+                _waitForInputIndicatorAnimator.SetTrigger(TOGGLE);
 
                 _dialogueText.text = replacedText;
                 _revealCoroutine = StartCoroutine(RevealCharacters(
@@ -132,7 +137,7 @@ namespace mono.ui
                 if (visibleCounter >= textPartLength)
                 {
                     _waitingForProceed = true;
-                    _waitForInputIndicatorAnimator.SetTrigger("Toggle");
+                    _waitForInputIndicatorAnimator.SetTrigger(TOGGLE);
 
                     yield break;
                 }
